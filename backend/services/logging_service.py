@@ -5,10 +5,12 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "../../chatbot_logs.db")
+# ✅ Always use the shared Docker volume DB
+DB_PATH = os.getenv("DB_PATH", "/app/chatbot_logs/chatbot_logs.db")
+os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
 
 
-def init_db():
+def init_db() -> None:
     """Create logs table if it does not exist."""
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
@@ -16,7 +18,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS logs (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-            user TEXT,                        -- 👈 NEW
+            user TEXT,
             question TEXT,
             answer TEXT,
             confidence REAL,
@@ -24,15 +26,14 @@ def init_db():
             escalated INTEGER,
             topic TEXT,
             response_time REAL,
-            feedback INTEGER   -- 👍👎 feedback (1 = helpful, 0 = not helpful, NULL = not given)
+            feedback INTEGER
         )
     """)
     conn.commit()
     conn.close()
 
 
-
-def detect_topic(question, n_clusters=5):
+def detect_topic(question: str, n_clusters: int = 5) -> str:
     """Assign a topic cluster label to the new question."""
     conn = sqlite3.connect(DB_PATH)
     try:
@@ -44,20 +45,33 @@ def detect_topic(question, n_clusters=5):
 
     questions = df["question"].dropna().tolist() + [question]
 
-    if len(questions) == 0:
+    if not questions:
         return "Cluster-0"
 
     vectorizer = TfidfVectorizer(stop_words="english")
     X = vectorizer.fit_transform(questions)
 
-    kmeans = KMeans(n_clusters=min(n_clusters, len(questions)), random_state=42, n_init=10)
+    kmeans = KMeans(
+        n_clusters=min(n_clusters, len(questions)),
+        random_state=42,
+        n_init=10
+    )
     labels = kmeans.fit_predict(X)
 
-    return f"Cluster-{labels[-1]}"  # last label = current question
+    return f"Cluster-{labels[-1]}"
 
 
-def log_interaction(user, question, answer, confidence, sources, escalated, response_time=None):
+def log_interaction(
+    user: str,
+    question: str,
+    answer: str,
+    confidence: float,
+    sources: list,
+    escalated: bool,
+    response_time: float = None
+) -> int:
     """Insert a new chatbot interaction into the database with topic clustering."""
+    init_db()  # 👈 Ensure table exists before inserting
     topic = detect_topic(question)
 
     conn = sqlite3.connect(DB_PATH)
@@ -67,7 +81,7 @@ def log_interaction(user, question, answer, confidence, sources, escalated, resp
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (
         datetime.now().isoformat(),
-        user,   # 👈 store username
+        user,
         question,
         answer,
         confidence if confidence is not None else None,
@@ -82,21 +96,15 @@ def log_interaction(user, question, answer, confidence, sources, escalated, resp
     return log_id
 
 
-
-def update_feedback(log_id, feedback):
-    """Update feedback (👍 or 👎) for a given log entry."""
+def update_feedback(log_id: int, feedback: int) -> bool:
+    """Update feedback (👍 or 👎) for a given log entry. Returns True if updated."""
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute(
         "UPDATE logs SET feedback = ? WHERE id = ?",
         (feedback, log_id),
     )
+    updated = cursor.rowcount
     conn.commit()
-
-    # Debug: check if any row was updated
-    if cursor.rowcount == 0:
-        print(f"⚠️ No row found with id={log_id}")
-    else:
-        print(f"✅ Updated feedback for log_id={log_id} → {feedback}")
-
     conn.close()
+    return updated > 0

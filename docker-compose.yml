@@ -1,23 +1,34 @@
-version: '3.9'
 services:
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: chatbot-backend
     ports:
       - '8000:8000'
     volumes:
-      - ./chatbot_logs.db:/app/chatbot_logs.db # share DB file
+      - chatbot_db:/app/chatbot_logs # ✅ DB stored here
+      - docs_data:/app/data # ✅ Docs stored here
     env_file:
-      - .env # ✅ load OPENAI_API_KEY from .env
+      - .env
+    environment:
+      - DB_PATH=/app/chatbot_logs/chatbot_logs.db
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: chatbot-frontend
     depends_on:
       - backend
     ports:
       - '8501:8501'
     volumes:
-      - ./chatbot_logs.db:/app/chatbot_logs.db # same DB file
+      - chatbot_db:/app/chatbot_logs # ✅ share same DB
     environment:
       - BACKEND_URL=http://backend:8000
+      - DB_PATH=/app/chatbot_logs/chatbot_logs.db
+
+volumes:
+  chatbot_db: # ✅ shared DB volume
+  docs_data: # ✅ docs storage volume
