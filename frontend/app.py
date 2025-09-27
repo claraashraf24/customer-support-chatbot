@@ -15,12 +15,12 @@ import seaborn as sns
 # -------------------
 st.set_page_config(page_title="Docs-Aware Chatbot", page_icon="🤖", layout="wide")
 
-# 🔗 Backend URL
+#  Backend URL
 BACKEND_URL = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
 DB_PATH = os.getenv("DB_PATH", "/app/chatbot_logs/chatbot_logs.db")
 
 
-# ✅ Local init_db for frontend
+#  Local init_db for frontend
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
@@ -132,7 +132,7 @@ page = st.sidebar.radio("Go to", ["Chatbot", "Analytics Dashboard"])
 
 
 # -------------------------
-# 📚 Chatbot Page
+#  Chatbot Page
 # -------------------------
 if page == "Chatbot":
     st.title("💬 Docs-Aware Chatbot")
@@ -186,14 +186,14 @@ if page == "Chatbot":
                 sources = ", ".join(result.get("sources", [])) or "None"
                 reply = f"{answer}<br><small><i>Sources: {sources}</i></small>"
 
-                # ✅ Store log_id with reply (so we can send feedback)
+                # Store log_id with reply (so we can send feedback)
                 log_id = result.get("log_id")
                 st.session_state["messages"].append({"role": "assistant", "content": reply, "log_id": log_id})
             else:
                 st.session_state["messages"].append({"role": "assistant", "content": "❌ Backend error", "log_id": None})
         st.rerun()
 
-    # ✅ Feedback buttons (for last assistant message)
+    # Feedback buttons (for last assistant message)
     if st.session_state["messages"] and st.session_state["messages"][-1]["role"] == "assistant":
         last_message = st.session_state["messages"][-1]
         log_id = last_message.get("log_id")
@@ -211,12 +211,12 @@ if page == "Chatbot":
 
 
 # -------------------------
-# 📊 Analytics Dashboard Page
+#  Analytics Dashboard Page
 # -------------------------
 elif page == "Analytics Dashboard":
     st.title("📊 Analytics Dashboard")
 
-    # ✅ Ensure DB + logs table exists before querying
+    #  Ensure DB + logs table exists before querying
     init_db()
 
     if st.session_state.get("refresh_dashboard", False):

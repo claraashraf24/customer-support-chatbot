@@ -1,6 +1,6 @@
 import sqlite3, os
 
-# ✅ Put DB in shared /app/data volume
+#  Put DB in shared /app/data volume
 DB_PATH = os.getenv("DB_PATH", "/app/data/chatbot_logs.db")
 
 def init_db():

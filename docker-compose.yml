@@ -7,8 +7,8 @@ services:
     ports:
       - '8000:8000'
     volumes:
-      - chatbot_db:/app/chatbot_logs # ✅ DB stored here
-      - docs_data:/app/data # ✅ Docs stored here
+      - chatbot_db:/app/chatbot_logs #  DB stored here
+      - docs_data:/app/data #  Docs stored here
     env_file:
       - .env
     environment:
@@ -24,11 +24,11 @@ services:
     ports:
       - '8501:8501'
     volumes:
-      - chatbot_db:/app/chatbot_logs # ✅ share same DB
+      - chatbot_db:/app/chatbot_logs # share same DB
     environment:
       - BACKEND_URL=http://backend:8000
       - DB_PATH=/app/chatbot_logs/chatbot_logs.db
 
 volumes:
-  chatbot_db: # ✅ shared DB volume
-  docs_data: # ✅ docs storage volume
+  chatbot_db: #  shared DB volume
+  docs_data: #  docs storage volume

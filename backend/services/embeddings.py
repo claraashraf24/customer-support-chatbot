@@ -56,7 +56,7 @@ def add_metadata(chunks, file_path: str):
 
 
 # -----------------------------
-# 🔹 Vectorstore Creation
+#  Vectorstore Creation
 # -----------------------------
 def create_vectorstore():
     """Rebuild FAISS index from all docs in /data."""
@@ -125,7 +125,7 @@ def reindex_all_docs():
 
 
 # -----------------------------
-# 🔹 Append-Only Indexing
+#  Append-Only Indexing
 # -----------------------------
 def add_file_to_vectorstore(file_path: str):
     """Embed ONLY this file and add it to existing FAISS index."""
@@ -166,7 +166,7 @@ def list_indexed_files():
 
 
 # -----------------------------
-# 🔹 Searching
+# Searching
 # -----------------------------
 def search_with_confidence(vectorstore, query: str, k: int = 3, threshold: float = 0.7):
     retriever = vectorstore.as_retriever(search_kwargs={"k": k})

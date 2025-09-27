@@ -11,11 +11,11 @@ router = APIRouter(prefix="/upload", tags=["upload"])
 DATA_DIR = "data"
 INDEX_DIR = "embeddings/faiss_index"
 
-# ✅ Ensure data dir exists on startup
+# Ensure data dir exists on startup
 os.makedirs(DATA_DIR, exist_ok=True)
 
 
-# 🚀 Replace mode (clear index + add only this file)
+#  Replace mode (clear index + add only this file)
 @router.post("/single")
 async def upload_single_doc(file: UploadFile = File(...)):
     # Clear embeddings index
@@ -29,7 +29,7 @@ async def upload_single_doc(file: UploadFile = File(...)):
             if os.path.isfile(file_path):
                 os.remove(file_path)
 
-    # ✅ Make sure data dir exists again
+    # Make sure data dir exists again
     os.makedirs(DATA_DIR, exist_ok=True)
 
     # Save uploaded file
@@ -43,10 +43,10 @@ async def upload_single_doc(file: UploadFile = File(...)):
     return {"message": f"File {file.filename} uploaded and indexed (single mode) 🚀"}
 
 
-# 🚀 Append mode (add to existing index, keep old files)
+# Append mode (add to existing index, keep old files)
 @router.post("/append")
 async def upload_and_append(file: UploadFile = File(...)):
-    os.makedirs(DATA_DIR, exist_ok=True)  # ✅ ensure dir exists
+    os.makedirs(DATA_DIR, exist_ok=True)  #  ensure dir exists
     save_path = os.path.join(DATA_DIR, file.filename)
     with open(save_path, "wb") as f:
         f.write(await file.read())
@@ -56,14 +56,14 @@ async def upload_and_append(file: UploadFile = File(...)):
     return {"message": f"File {file.filename} uploaded and added to index 🚀"}
 
 
-# 🚀 Reindex all docs in /data
+# Reindex all docs in /data
 @router.post("/reindex")
 async def reindex_docs():
     reindex_all_docs()
     return {"message": "All documents re-indexed 🚀"}
 
 
-# 🚀 List currently indexed files
+# List currently indexed files
 @router.get("/list")
 async def list_indexed_docs():
     if not os.path.exists(DATA_DIR):

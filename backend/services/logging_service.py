@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans
 
-# ✅ Always use the shared Docker volume DB
+#  Always use the shared Docker volume DB
 DB_PATH = os.getenv("DB_PATH", "/app/chatbot_logs/chatbot_logs.db")
 os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
 
@@ -71,7 +71,7 @@ def log_interaction(
     response_time: float = None
 ) -> int:
     """Insert a new chatbot interaction into the database with topic clustering."""
-    init_db()  # 👈 Ensure table exists before inserting
+    init_db()  #  Ensure table exists before inserting
     topic = detect_topic(question)
 
     conn = sqlite3.connect(DB_PATH)
@@ -97,7 +97,7 @@ def log_interaction(
 
 
 def update_feedback(log_id: int, feedback: int) -> bool:
-    """Update feedback (👍 or 👎) for a given log entry. Returns True if updated."""
+    """Update feedback for a given log entry. Returns True if updated."""
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute(

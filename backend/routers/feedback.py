@@ -6,7 +6,7 @@ router = APIRouter(prefix="/feedback", tags=["feedback"])
 
 class FeedbackRequest(BaseModel):
     log_id: int
-    feedback: int   # 1 = 👍 helpful, 0 = 👎 not helpful
+    feedback: int   # 1 =  helpful, 0 =  not helpful
 
 @router.post("/")
 async def give_feedback(request: FeedbackRequest):

@@ -5,19 +5,19 @@ import shutil
 from backend.services.embeddings import DATA_DIR, INDEX_DIR
 from backend.services.logging_service import init_db
 
-# ✅ Load environment variables from .env (works in Docker too if env_file is set)
+#  Load environment variables from .env (works in Docker too if env_file is set)
 load_dotenv()
 
-# ✅ Double-check for OPENAI_API_KEY
+#  Double-check for OPENAI_API_KEY
 if not os.getenv("OPENAI_API_KEY"):
     print("⚠️ WARNING: OPENAI_API_KEY is not set. Embeddings will fail until this is fixed.")
 
-# ✅ Import routers after env is loaded
+#  Import routers after env is loaded
 from backend.routers import upload, chat, feedback
 
 app = FastAPI(title="Docs-Aware Chatbot API")
 
-# ✅ Register routers
+#  Register routers
 app.include_router(upload.router)
 app.include_router(chat.router)
 app.include_router(feedback.router)
