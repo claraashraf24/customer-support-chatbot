@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+langchain
+langchain-openai
+langchain-community
+scikit-learn
+pandas
+sqlite-utils
+python-multipart
+pypdf
+cryptography>=3.1
+faiss-cpu   # ✅ added

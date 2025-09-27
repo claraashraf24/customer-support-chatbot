@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+
+# Virtual environment
+venv/
+
+# Environment variables
+.env
+
+# Data & embeddings
+data/
+embeddings/
+
+# Logs
+*.log
+logs/
+chatbot_logs.db
+
+# OS files
+.DS_Store
+Thumbs.db

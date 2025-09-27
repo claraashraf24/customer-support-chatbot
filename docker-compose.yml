@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  backend:
+    build: ./backend
+    container_name: chatbot-backend
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./chatbot_logs.db:/app/chatbot_logs.db # share DB file
+    env_file:
+      - .env # ✅ load OPENAI_API_KEY from .env
+
+  frontend:
+    build: ./frontend
+    container_name: chatbot-frontend
+    depends_on:
+      - backend
+    ports:
+      - '8501:8501'
+    volumes:
+      - ./chatbot_logs.db:/app/chatbot_logs.db # same DB file
+    environment:
+      - BACKEND_URL=http://backend:8000
