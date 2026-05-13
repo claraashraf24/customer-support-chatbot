@@ -1,10 +1,10 @@
-📚 Docs-Aware Customer Support Chatbot
+ Docs-Aware Customer Support Chatbot
 
 This is a customer support chatbot that can read documents you upload, store them, and answer questions based on their content. It’s built with FastAPI (backend) and Streamlit (frontend), and uses OpenAI embeddings + FAISS under the hood for document search.
 
 I built this project to make support teams more efficient — you can upload PDFs, chat with them, and track usage/feedback in one place.
 
-✨ Features
+ Features
 
 Upload and manage documents
 
@@ -24,7 +24,7 @@ Simple analytics dashboard (usage + feedback)
 
 Fully containerized with Docker (backend + frontend)
 
-🛠️ Tech Stack
+ Tech Stack
 
 Backend: FastAPI, LangChain, FAISS, OpenAI API
 
@@ -34,7 +34,7 @@ Database: SQLite (easy to swap with Postgres later)
 
 Deployment: Docker & Docker Compose
 
-📂 Project Structure
+ Project Structure
 customer-support-chatbot/
 ├── backend/          # FastAPI backend (routes, services, embeddings)
 ├── frontend/         # Streamlit frontend
@@ -45,7 +45,7 @@ customer-support-chatbot/
 ├── docker-compose.yml
 ├── .env              # Environment variables (not committed)
 
-⚡ Getting Started
+ Getting Started
 1. Clone the repo
 git clone https://github.com/YOUR_USERNAME/customer-support-chatbot.git
 cd customer-support-chatbot
@@ -75,7 +75,7 @@ Frontend:
 cd frontend
 streamlit run app.py
 
-📊 Roadmap
+ Roadmap
 
  Pie chart for feedback (helpful vs not helpful)
 
@@ -89,7 +89,7 @@ streamlit run app.py
 
  Add screenshots to this README
 
-👤 Author
+ Author
 
 Hi, I’m Clara Yousif 👋
 
